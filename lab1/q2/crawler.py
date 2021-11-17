@@ -10,7 +10,7 @@ import numpy as np
 from utils import BLACK, WHITE
 
 
-def get_random_board(seed15=None):
+def get_random_board(seed15=None, url = None):
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     # driver = webdriver.Chrome(chrome_options=options)
@@ -19,8 +19,11 @@ def get_random_board(seed15=None):
 
     if seed15 is None:
         seed15 = ''.join([str(random.randint(0, 9)) for _ in range(15)])
-    url = f"https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/lightup.html#7x7b20s4d2#{seed15}"
+    if url is None:
+        url = f"https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/lightup.html#7x7b20s4d2#{seed15}"
     # url = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/lightup.html#10x10b20s2d1#248925330725324"
+    
+
     print(url)
     driver.get(url)
     elem = WebDriverWait(driver, 2000).until(
@@ -40,6 +43,9 @@ def get_random_board(seed15=None):
                 arr.append(BLACK)
             else:
                 arr.append(t)
-    board = np.array(arr).reshape(7, 7).astype(int)
+
+    shape = re.findall(r"#(\d+)x(\d+)", url)
+    print(shape)
+    board = np.array(arr).reshape(int(shape[0][0]), int(shape[0][1])).astype(int)
 
     return board
