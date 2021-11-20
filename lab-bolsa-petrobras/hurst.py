@@ -23,8 +23,8 @@ def calculate_rescaled_range(ts, n):
     
     return np.mean(ris)
 
-def compute_hurst_exponent(ts):
-    ns = np.logspace(2, np.log2(len(ts)), num=30, base=2, dtype=int)
+def compute_hurst_exponent(ts, n_size = 30):
+    ns = np.logspace(2, np.log2(len(ts)), num=n_size, base=2, dtype=int)
     ri = np.array([calculate_rescaled_range(ts, n) for n in ns])
     h = np.polyfit(np.log2(ns), np.log2(ri), 1)[0]
 
